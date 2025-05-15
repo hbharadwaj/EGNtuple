@@ -72,6 +72,7 @@ process.egRegTreeMaker = cms.EDAnalyzer("EGRegTreeMaker",
 
 process.egRegTreeMaker.verticesTag = cms.InputTag("offlinePrimaryVertices")
 process.egRegTreeMaker.rhoTag = cms.InputTag("fixedGridRhoFastjetAll")
+process.egRegTreeMaker.CentralitySrc = cms.InputTag("hiCentrality")
 process.egRegTreeMaker.genPartsTag = cms.InputTag("genParticles")
 process.egRegTreeMaker.elesTag = cms.InputTag("gedGsfElectrons")
 process.egRegTreeMaker.phosTag = cms.InputTag("gedPhotons")

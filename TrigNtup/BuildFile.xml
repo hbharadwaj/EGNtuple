@@ -25,6 +25,7 @@
 <use   name="RecoEgamma/ElectronIdentification"/>
 <use   name="HLTrigger/HLTcore"/>
 <use   name="SHarper/SHNtupliser"/>
+<use   name="DataFormats/HeavyIonEvent"/>
 
 <export>
   <lib   name="1"/>

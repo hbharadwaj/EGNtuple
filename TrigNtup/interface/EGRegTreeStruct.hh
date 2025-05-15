@@ -13,6 +13,8 @@
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterTools.h"
 #include "CondFormats/EcalObjects/interface/EcalChannelStatus.h"
 
+#include "DataFormats/HeavyIonEvent/interface/Centrality.h"
+
 #include "TTree.h"
 
 namespace reco{
@@ -107,6 +109,7 @@ struct GenInfoStruct {
 struct EGRegTreeStruct {
   int nrVert;
   float rho;
+  float hiHF;
   float nrPUInt;
   float nrPUIntTrue;
   EvtStruct evt;
@@ -129,10 +132,11 @@ struct EGRegTreeStruct {
   }
   void createBranches(TTree* tree);
   void setBranchAddresses(TTree* tree);
-  void fill(const edm::Event& event,int iNrVert,float iRho,float nrPUInt,float nrTruePUInt,const EcalRecHitCollection& ecalHitsEB,const EcalRecHitCollection& ecalHitsEE,const CaloTopology& topo,const EcalChannelStatus& ecalChanStatus,const reco::SuperCluster* iSC,const reco::GenParticle* iMC,const reco::GsfElectron* iEle,const reco::Photon* iPho,const reco::SuperCluster* altSC,const std::vector<const reco::GsfElectron*>& altEles,const std::vector<const reco::Photon*>& altPhos );
+  void fill(const edm::Event& event,int iNrVert,float iRho,float iHiHF,float nrPUInt,float nrTruePUInt,const EcalRecHitCollection& ecalHitsEB,const EcalRecHitCollection& ecalHitsEE,const CaloTopology& topo,const EcalChannelStatus& ecalChanStatus,const reco::SuperCluster* iSC,const reco::GenParticle* iMC,const reco::GsfElectron* iEle,const reco::Photon* iPho,const reco::SuperCluster* altSC,const std::vector<const reco::GsfElectron*>& altEles,const std::vector<const reco::Photon*>& altPhos );
   void clear(){
     nrVert=0;
     rho=0.;
+    hiHF=-1.;
     nrPUInt=0.;
     nrPUIntTrue=0.;
     evt.clear();
