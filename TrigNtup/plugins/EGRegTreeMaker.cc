@@ -30,6 +30,7 @@
 #include "CondFormats/EcalObjects/interface/EcalChannelStatus.h"
 
 #include "SHarper/TrigNtup/interface/EGRegTreeStruct.hh"
+#include "DataFormats/HeavyIonEvent/interface/Centrality.h"
 
 #include "TFile.h"
 #include "TTree.h"
@@ -45,6 +46,7 @@ private:
 
   edm::EDGetTokenT<reco::VertexCollection>  verticesToken_;
   edm::EDGetTokenT<double> rhoToken_;
+  edm::EDGetTokenT<reco::Centrality> CentralityTag_;
   edm::EDGetTokenT<reco::GenParticleCollection> genPartsToken_;
   std::vector<edm::EDGetTokenT<reco::SuperClusterCollection>> scTokens_;
   std::vector<edm::EDGetTokenT<reco::SuperClusterCollection>> scAltTokens_;
@@ -102,6 +104,7 @@ EGRegTreeMaker::EGRegTreeMaker(const edm::ParameterSet& iPara):
   }
   setToken(verticesToken_,iPara,"verticesTag");
   setToken(rhoToken_,iPara,"rhoTag");
+  setToken(CentralityTag_,iPara,"CentralitySrc");
   setToken(genPartsToken_,iPara,"genPartsTag");
   setToken(scTokens_,iPara,"scTag");
   setToken(scAltTokens_,iPara,"scAltTag");
@@ -205,6 +208,8 @@ void EGRegTreeMaker::analyze(const edm::Event& iEvent,const edm::EventSetup& iSe
   auto genPartsHandle = getHandle(iEvent,genPartsToken_);
   auto verticesHandle = getHandle(iEvent,verticesToken_);
   auto rhoHandle = getHandle(iEvent,rhoToken_);
+  auto CentralityHandle = getHandle(iEvent,CentralityTag_);
+  float iHiHF = CentralityHandle->EtHFtowerSum();
   auto elesHandle = getHandle(iEvent,elesToken_);
   auto eleAltHandles = getHandle(iEvent,eleAltTokens_);
   auto phosHandle = getHandle(iEvent,phosToken_);
@@ -239,7 +244,7 @@ void EGRegTreeMaker::analyze(const edm::Event& iEvent,const edm::EventSetup& iSe
 	const std::vector<const reco::Photon*> altPhos = matchToAltCollsBySCSeedId(pho,phoAltHandles);
 
 	if(hasBasicClusters(sc)){
-	  egRegTreeData_.fill(iEvent,nrVert,*rhoHandle,nrPUInt,nrPUIntTrue,
+	  egRegTreeData_.fill(iEvent,nrVert,*rhoHandle,iHiHF,nrPUInt,nrPUIntTrue,
 			      *ecalHitsEBHandle,*ecalHitsEEHandle,
 			      *caloTopoHandle,
 			      *chanStatusHandle,
@@ -261,7 +266,8 @@ void EGRegTreeMaker::analyze(const edm::Event& iEvent,const edm::EventSetup& iSe
 	const std::vector<const reco::GsfElectron*> altEles = matchToAltCollsBySCSeedId(ele,eleAltHandles);
 	const std::vector<const reco::Photon*> altPhos = matchToAltCollsBySCSeedId(pho,phoAltHandles);
 
-	egRegTreeData_.fill(iEvent,nrVert,*rhoHandle,nrPUInt,nrPUIntTrue,
+
+	egRegTreeData_.fill(iEvent,nrVert,*rhoHandle,iHiHF,nrPUInt,nrPUIntTrue,
 			    *ecalHitsEBHandle,*ecalHitsEEHandle,
 			    *caloTopoHandle,
 			    *chanStatusHandle,

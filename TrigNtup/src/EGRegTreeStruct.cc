@@ -8,11 +8,14 @@
 #include "DataFormats/EcalDetId/interface/EEDetId.h"
 #include "CondFormats/EcalObjects/interface/EcalChannelStatus.h"
 
+#include "DataFormats/HeavyIonEvent/interface/Centrality.h"
+
 
 void EGRegTreeStruct::createBranches(TTree* tree)
 {
   tree->Branch("nrVert",&nrVert,"nrVert/I");
   tree->Branch("rho",&rho,"rho/F");
+  tree->Branch("hiHF",&hiHF,"hiHF/F");
   tree->Branch("nrPUInt",&nrPUInt,"nrPUInt/F");
   tree->Branch("nrPUIntTrue",&nrPUIntTrue,"nrPUIntTrue/F");
   tree->Branch("evt",&evt,evt.contents().c_str());
@@ -41,6 +44,7 @@ void EGRegTreeStruct::setBranchAddresses(TTree* tree)
 {
   tree->SetBranchAddress("nrVert",&nrVert);
   tree->SetBranchAddress("rho",&rho);
+  tree->SetBranchAddress("hiHF",&hiHF);
   tree->SetBranchAddress("nrPUInt",&nrPUInt);
   tree->SetBranchAddress("nrPUIntTrue",&nrPUIntTrue);
   tree->SetBranchAddress("evt",&evt);
@@ -84,13 +88,14 @@ void GenInfoStruct::fill(const reco::GenParticle& genPart,float iDR)
   dR = iDR;
 }
 
-void EGRegTreeStruct::fill(const edm::Event& event,int iNrVert,float iRho,float iNrPUInt,float iNrPUIntTrue,
+void EGRegTreeStruct::fill(const edm::Event& event,int iNrVert,float iRho,float iHiHF,float iNrPUInt,float iNrPUIntTrue,
 			   const EcalRecHitCollection& ecalHitsEB,const EcalRecHitCollection& ecalHitsEE,const CaloTopology& topo,const EcalChannelStatus& ecalChanStatus,const reco::SuperCluster* iSC,const reco::GenParticle* iMC,const reco::GsfElectron* iEle,const reco::Photon* iPho,const reco::SuperCluster* scAlt, const std::vector<const reco::GsfElectron*>& altEles,const std::vector<const reco::Photon*>& altPhos)
 {
   clear();
 
   nrVert = iNrVert;
   rho = iRho;
+  hiHF = iHiHF;
   nrPUInt = iNrPUInt;
   nrPUIntTrue = iNrPUIntTrue;  
   evt.fill(event);
